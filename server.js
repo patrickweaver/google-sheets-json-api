@@ -111,14 +111,15 @@ app.use(function(req, res, next) {
   })
   .then(function(newData) {
     if (index > -1) {
-      data.data = newData;
+      data.currentWorksheet = data.worksheets[index].title;
+      data.rows = newData;
     }
     res.json(data);
     return;
   })
   .catch(function(err) {
-    console.log("ERROR: " + err);
-    res.locals.error = err;
+    console.log("ERROR: " + err.error);
+    res.locals.error = err.error;
     next();
   });
 });
