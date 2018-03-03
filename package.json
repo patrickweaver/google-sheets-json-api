@@ -1,0 +1,20 @@
+{
+  "name": "google-spreadsheet",
+  "version": "0.0.1",
+  "description": "A node app with a google spreadsheet backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "google-spreadsheet": "^2.0.4"
+  },
+  "engines": {
+    "node": "8.x"
+  },
+  "repository": {
+    "url": ""
+  },
+  "license": "MIT"
+}

@@ -1,2 +1,1 @@
-# google-sheets-json-api
-A JSON API that uses a Google Sheet data store.
+# Google Sheet App: JSON API
