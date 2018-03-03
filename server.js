@@ -3,9 +3,6 @@
 var express = require('express');
 var app = express();
 
-// This will create a static public directory in /public. Put any static files you want to be available on your site there. This is usually things like a style.css file.
-app.use(express.static('public'));
-
 // This example uses the 'google-spreadsheet' NPM package to access the sheet
 // https://www.npmjs.com/package/google-spreadsheet
 // Note: There are two NPM packages with similar names, 'google-spreadsheet' and 'google-spreadsheets'
