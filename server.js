@@ -23,7 +23,7 @@ const SPREADSHEET_KEY             = "1C7Ojs1i8duxWBmBYPtMTDVLRF7mu-WMTEjKi1-xCuE
 
 const DEFAULT_TAB                 = 0; // Could also use the name of a tab like "Trees", or null for no default and just links
 
-const API_URL                     = "https://google-sheet-app-json.glitch.me/";
+const API_URL                     = "https://google-sheet-json-api.glitch.me/";
 
 
 function getInfo() {

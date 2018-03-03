@@ -1,5 +1,5 @@
 {
-  "name": "google-spreadsheet",
+  "name": "google-spreadsheet-app-json",
   "version": "0.0.1",
   "description": "A node app with a google spreadsheet backend",
   "main": "server.js",
@@ -14,7 +14,7 @@
     "node": "8.x"
   },
   "repository": {
-    "url": ""
+    "url": "https://github.com/PatrickWeaver/google-sheets-json-api"
   },
   "license": "MIT"
 }
