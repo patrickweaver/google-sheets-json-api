@@ -2,14 +2,6 @@
 // https://expressjs.com/
 var express = require('express');
 var app = express();
-
-// This will create a static public directory in /public. Put any static files you want to be available on your site there. This is usually things like a style.css file.
-app.use(express.static('public'));
-
-// This example uses the 'google-spreadsheet' NPM package to access the sheet
-// https://www.npmjs.com/package/google-spreadsheet
-// Note: There are two NPM packages with similar names, 'google-spreadsheet' and 'google-spreadsheets'
-var GoogleSpreadsheet = require('google-spreadsheet');
  
 
 // * * * * * * * * * * * * * * * * * * * 
@@ -25,56 +17,19 @@ const DEFAULT_TAB                 = 0; // Could also use the name of a tab like 
 
 const API_URL                     = "https://google-sheet-json-api.glitch.me/";
 
+// This example uses the 'google-spreadsheet' NPM package to access the sheet
+// https://www.npmjs.com/package/google-spreadsheet
+// Note: There are two NPM packages with similar names, 'google-spreadsheet' and 'google-spreadsheets'
+// We don't use it in this file, but you will see the following line in sheets.js
+//var GoogleSpreadsheet = require('google-spreadsheet');
 
-function getInfo() {
-  var doc = new GoogleSpreadsheet(SPREADSHEET_KEY);
-  return new Promise(function(resolve, reject) {
-    doc.getInfo(function(err, sheetData) {
-      if (err) {
-        console.log(err);
-        reject({error: err});
-      } else {
-        if (sheetData.worksheets) {
-          for (var i in sheetData.worksheets) {
-             sheetData.worksheets[i].apiURL = API_URL + sheetData.worksheets[i].title;
-          }
-        }
-        resolve(sheetData);
-      }
-    });
-  });
-}
-
-function getSheet(worksheet) {
-  return new Promise(function(resolve, reject) { 
-    worksheet.getRows({}, function(err, sheetData) {
-      if (err) {
-        reject(err);
-      }
-      resolve(sheetData); 
-    });
-  });
-};
-
-function findSheetIndex(title, info) {
-  var index = -1;
-  if (title != "") {
-    for (var w in info.worksheets) {
-      if (info.worksheets[w].title === title) {
-        index = w;
-        break;
-      }
-    }    
-  } else {
-    return -1;
-  }
-  return index; 
-}
+var sheets = require('./sheets');
+sheets.SPREADSHEET_KEY = SPREADSHEET_KEY;
+sheets.API_URL = API_URL;
 
 app.get("/favicon.ico", function(req, res) {
   res.send("");
 });
-
 
 app.get("/", function(req, res, next) {
   res.locals.tab = DEFAULT_TAB;
@@ -86,42 +41,16 @@ app.get("/:tab", function(req, res, next) {
   next();
 });
 
-app.use(function(req, res, next) {
-  var data;
-  var index = -1;
-  var title = "";
-  getInfo()
-  .then(function(info) {
-    data = info;
-    var tab = res.locals.tab;
-    if (tab === null) {
-      return {}; 
-    }
-    
-    if (typeof tab === "string") {
-      title = tab;
-    } else {
-      index = tab;
-    }
 
-    if (index < 0) {
-      index = findSheetIndex(title, info);
-    }
-    if (index < 0) {
-      throw({error: "Worksheet not found"});
-    }
-    return getSheet(info.worksheets[index]);
-  })
-  .then(function(newData) {
-    if (index > -1) {
-      data.data = newData;
-    }
+
+app.use(function(req, res, next) {
+  sheets.getData(res.locals.tab)
+  .then(function(data){
     res.json(data);
     return;
   })
-  .catch(function(err) {
-    console.log("ERROR: " + err);
-    res.locals.error = err;
+  .catch(function(error) {
+    res.locals.error = error;
     next();
   });
 });
