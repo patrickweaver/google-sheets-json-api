@@ -53,6 +53,23 @@ function getSheet(worksheet) {
   });
 };
 
+function getHeaders(worksheet) {
+  return new Promise(function(resolve, reject) {
+    worksheet.getCells({
+      "min-row": 1,
+      "max-row": 1,
+      "min-col": 1,
+      "max-col": 6,
+      "return-empty": true,
+    }, function(err, headers) {
+      if (err) {
+        reject(err);
+      }
+      resolve(headers);
+    });
+  });
+}
+
 function findSheetIndex(title, info) {
   var index = -1;
   if (title != "") {
@@ -85,6 +102,8 @@ app.get("/:tab", function(req, res, next) {
 
 app.use(function(req, res, next) {
   var data;
+  var rows;
+  var worksheet;
   var index = -1;
   var title = "";
   getInfo()
@@ -107,13 +126,43 @@ app.use(function(req, res, next) {
     if (index < 0) {
       throw({error: "Worksheet not found"});
     }
-    return getSheet(info.worksheets[index]);
+    worksheet = info.worksheets[index]
+    return getSheet(worksheet);
   })
   .then(function(newData) {
     if (index > -1) {
+      data.worksheets[index].current = true;
       data.currentWorksheet = data.worksheets[index].title;
-      data.rows = newData;
+      rows = newData;
+      //data.r = newData;
     }
+    //res.json(data);
+    //return;
+    return getHeaders(worksheet);
+  })
+  .then(function(headers) {
+    //console.log(headers);
+    data.rows = [];
+    for (var i in rows) {
+      var newRow = {};
+      var row = rows[i]
+      for (var j in headers) {
+        var header = headers[j]._value;
+        var prop = header.replace(/[^a-zA-Z0-9.-]/g, '').toLowerCase();
+        newRow[header] = row[prop];
+        console.log(newRow);
+      }
+      data.rows.push(newRow);
+    }
+    
+    for (var k in headers) {
+      var str = headers[k]._value;
+      str = str
+      //console.log(str);
+    }
+    
+    
+    
     res.json(data);
     return;
   })

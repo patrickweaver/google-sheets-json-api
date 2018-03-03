@@ -1,5 +1,5 @@
 {
-  "name": "google-spreadsheet-app-json",
+  "name": "google-spreadsheet-json-api",
   "version": "0.0.1",
   "description": "A node app with a google spreadsheet backend",
   "main": "server.js",
