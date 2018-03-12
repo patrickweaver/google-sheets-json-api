@@ -2,7 +2,7 @@
 // https://www.npmjs.com/package/google-spreadsheet
 // Note: There are two NPM packages with similar names, 'google-spreadsheet' and 'google-spreadsheets'
 var GoogleSpreadsheet = require('google-spreadsheet');
- 
+
 function linkOrImage(url) {
   var imageExts = ["gif", "jpg", "jpeg", "png", "bmp", "svg"];
   var ext = url.split(".").pop().split("?")[0];
@@ -29,11 +29,11 @@ function findSheetIndex (title, info) {
         index = w;
         break;
       }
-    }    
+    }
   } else {
     return -1;
   }
-  return index; 
+  return index;
 }
 
 function getHeaders(worksheet, cols) {
@@ -54,12 +54,12 @@ function getHeaders(worksheet, cols) {
 }
 
 function getSheet(worksheet) {
-  return new Promise(function(resolve, reject) { 
+  return new Promise(function(resolve, reject) {
     worksheet.getRows({}, function(err, sheetData) {
       if (err) {
         reject(err);
       }
-      resolve(sheetData); 
+      resolve(sheetData);
     });
   });
 };
@@ -94,8 +94,8 @@ function getData(tab) {
     .then(function(info) {
       data = info;
       if (tab === null) {
-        return {}; 
-      }  
+        return {};
+      }
       if (isNaN(tab)) {
         title = tab;
         index = findSheetIndex(title, info);
@@ -130,7 +130,7 @@ function getData(tab) {
           var header = headers[j]._value;
           var prop = header.replace(/[^a-zA-Z0-9.-]/g, '').toLowerCase();
           if (row[prop] && typeof row[prop] === "string" && row[prop].substring(0, 4) === "http") {
-            row[prop] = linkOrImage(row[prop]); 
+            row[prop] = linkOrImage(row[prop]);
           }
           if (row[prop]) {
             newRow[header] = row[prop];
@@ -151,4 +151,3 @@ function getData(tab) {
 module.exports = {
   getData: getData
 }
-  
