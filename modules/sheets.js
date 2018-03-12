@@ -94,17 +94,17 @@ function getData(tab) {
     .then(function(info) {
       data = info;
       var worksheets = [];
-      var staticData = {};
+      var staticWorksheet = false;
       for (var i in data.worksheets) {
         if (data.worksheets[i].title != "STATIC") {
           worksheets.push(data.worksheets[i]); 
         } else {
-          staticData = data.worksheets[i];
+          staticWorksheet = data.worksheets[i];
         }
       }                 
       data.worksheets = worksheets;
-      data.staticData = staticData;
-      
+      data.staticWorksheet = staticWorksheet;
+
       if (tab === null) {
         return {};
       }
@@ -131,15 +131,16 @@ function getData(tab) {
           };
         }
         data.worksheets[index].current = true;
+        data.currentWorksheet = {};
         var currentTitle = data.worksheets[index].title;
         if (
           currentTitle.substr(0, 14) != "Form Responses"
           &&
           currentTitle.substr(0, 22) != "Copy of Form Responses"
         ) {
-          data.currentWorksheet = data.worksheets[index].title;
+          data.currentWorksheet.title = data.worksheets[index].title;
         } else {
-          data.currentWorksheet = "";
+          data.currentWorksheet.title = "";
         }
         rows = newData;
         if (data.worksheets.length === 1) {
@@ -166,6 +167,19 @@ function getData(tab) {
           }
         }
         data.rows.push(newRow);
+      }
+
+      if (data.staticWorksheet) {
+        return getSheet(data.staticWorksheet);
+      } else {
+        return {}
+      }
+    })
+    .then(function(staticData) {
+      for (var i in staticData[0]) {
+        if (i === data.currentWorksheet.title.replace(/[^a-zA-Z0-9.-]/g, '').toLowerCase()) {
+          data.currentWorksheet.staticHTML = staticData[0][i];
+        }
       }
       resolve(data);
     })
