@@ -111,7 +111,16 @@ function getData(tab) {
     .then(function(newData) {
       if (index >= 0) {
         data.worksheets[index].current = true;
-        data.currentWorksheet = data.worksheets[index].title;
+        var currentTitle = data.worksheets[index].title;
+        if (
+          currentTitle.substr(0, 14) != "Form Responses"
+          &&
+          currentTitle.substr(0, 22) != "Copy of Form Responses"
+        ) {
+          data.currentWorksheet = data.worksheets[index].title;
+        } else {
+          data.currentWorksheet = "";
+        }
         rows = newData;
         if (data.worksheets.length === 1) {
           data.worksheets[index].only = true; 
