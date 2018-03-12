@@ -2,15 +2,15 @@
 // https://expressjs.com/
 var express = require('express');
 var app = express();
- 
 
-// * * * * * * * * * * * * * * * * * * * 
+
+// * * * * * * * * * * * * * * * * * * *
 // SETTINGS:
-// * * * * * * * * * * * * * * * * * * * 
+// * * * * * * * * * * * * * * * * * * *
 
 // spreadsheet key is the long id in the sheets URL (after "/d/").
 // https://docs.google.com/spreadsheets/d/1C7Ojs1i8duxWBmBYPtMTDVLRF7mu-WMTEjKi1-xCuE8/edit#gid=707399917
-//                                        ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^  
+//                                        ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
 const SPREADSHEET_KEY             = "1C7Ojs1i8duxWBmBYPtMTDVLRF7mu-WMTEjKi1-xCuE8";
 
 const DEFAULT_TAB                 = 0; // Could also use the name of a tab like "Trees", or null for no default and just links
@@ -23,7 +23,7 @@ const API_URL                     = "https://google-sheet-json-api.glitch.me/";
 // We don't use it in this file, but you will see the following line in sheets.js
 //var GoogleSpreadsheet = require('google-spreadsheet');
 
-var sheets = require('./sheets');
+var sheets = require('./modules/sheets');
 sheets.SPREADSHEET_KEY = SPREADSHEET_KEY;
 sheets.API_URL = API_URL;
 
