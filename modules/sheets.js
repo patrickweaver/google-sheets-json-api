@@ -110,6 +110,14 @@ function getData(tab) {
     })
     .then(function(newData) {
       if (index >= 0) {
+        var title = data.title;
+        if (title.length >= 11) {
+          var endIndex = title.length;
+          var startIndex = endIndex - 11;
+          if(title.substr(startIndex, endIndex) === "(Responses)") {
+            data.title = data.title.substr(0, startIndex); 
+          };
+        }
         data.worksheets[index].current = true;
         var currentTitle = data.worksheets[index].title;
         if (
